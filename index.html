@@ -1,0 +1,1099 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <title>Connecting Care</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.js"></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/vis/4.21.0/vis.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+
+    <style>
+      #mynetwork {
+        width: 100vw;
+        height: 100vh;
+        position: absolute;
+        left: 0px;
+        top: 0px;
+        z-index: -1;
+        right: 0px;
+        margin: 0px auto;
+      }
+      nav {
+        padding-top: 5px;
+      }
+      .starthidden {
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid">
+      <input type="hidden" name="pos" id="pos" value="1" />
+      <nav>
+        <ul class="pagination pagination-sm float-sm-left" id="pagination">
+          <li class="page-item disabled">
+            <a class="page-link"><b>Connecting Care</b></a>
+          </li>
+          <li
+            class="page-item disabled"
+            id="pop0"
+            data-toggle="popover"
+            data-content="December 2014:<br />504 users, viewed 5,725 records"
+            data-placement="bottom"
+            data-html="true"
+          >
+            <a class="page-link">2014</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#" onclick="clickIncrPos()">Next</a>
+          </li>
+        </ul>
+      </nav>
+      <div
+        id="finalbuttongroup"
+        class="btn-toolbar float-sm-right starthidden"
+        role="toolbar"
+      >
+        <button
+          type="button"
+          class="btn btn-light btn-sm"
+          onclick="clusterByCid()"
+          style="margin-right: 5px"
+        >
+          Collapse Connecting Care
+        </button>
+        <button
+          type="button"
+          class="btn btn-light btn-sm"
+          onclick="clickRemove()"
+        >
+          Hide removed
+        </button>
+      </div>
+
+      <div id="mynetwork"></div>
+      <textarea
+        id="desc"
+        class="form-control"
+        rows="2"
+        style="position: absolute;bottom: 0;width: 98vw;bottom: 5px;"
+        hidden="hidden"
+      >
+Phase 1</textarea
+      >
+    </div>
+
+    <script>
+      var pos = 1
+
+      var posArray = [
+        {
+          stage: '2014',
+          comment: 'December 2014:<br>504 users, viewed 5,725 records'
+        },
+        {
+          stage: '2015',
+          comment: 'December 2015:<br>1,208 users, viewed 6,290 records'
+        },
+        {
+          stage: '2016',
+          comment: 'December 2016:<br>1,624 users, viewed 9,147 records'
+        },
+        {
+          stage: '2017-H1',
+          comment: 'June 2017:<br>1,887 users, viewed 11,125 records'
+        },
+        {
+          stage: '2017-H2',
+          comment: 'December 2017:<br>3,568 users, viewed 13,438 records'
+        },
+        {
+          stage: '2018-H1',
+          comment: 'June 2018:<br>5,832 users, viewed 21,036 records'
+        },
+        {
+          stage: '2018-H2',
+          comment: 'December 2018:<br>5,304 users, viewed 27,384 records'
+        },
+        {
+          stage: '2019-H1',
+          comment: 'June 2018:<br>5,827 users, viewed 36,213 records'
+        },
+        { stage: '2019-H2', comment: '' }
+      ]
+
+      function updatePosition(newPos) {
+        var ids = []
+        var oldLabels = []
+        var newLabels = []
+        var oldNodes = allNodes.get({
+          filter: function(n) {
+            return n.end == newPos
+          }
+        })
+
+        var removedLabels = []
+        oldNodes.forEach(n => {
+          ids.push(n.id)
+          oldLabels.push(n.label)
+          nodes.update([
+            {
+              id: n.id,
+              color: 'lightgrey',
+              font: { color: 'grey' },
+              group: undefined
+            }
+          ])
+        })
+
+        var newNodes = allNodes.get({
+          filter: function(n) {
+            return n.start == newPos
+          }
+        })
+
+        newNodes.forEach(n => {
+          nodes.add(n)
+          ids.push(n.id)
+          newLabels.push(n.label)
+        })
+
+        return { ids: ids, oldLabels: oldLabels, newLabels: newLabels }
+      }
+
+      // create an array with nodes
+      var allNodes = new vis.DataSet([
+        {
+          id: 101,
+          cid: 1,
+          label: 'Connecting Care\nPortal',
+          title: 'Connecting Care Portal',
+          group: 0,
+          shape: 'dot',
+          size: 40,
+          start: 1
+        },
+        {
+          id: 102,
+          cid: 1,
+          label: 'Connecting Care\nPlatform',
+          title: 'Connecting Care Interoperability Platform',
+          group: 0,
+          shape: 'dot',
+          size: 40,
+          start: 1
+        },
+        {
+          id: 103,
+          label: 'Inbound\nWeb Services',
+          group: 3,
+          shape: 'square',
+          start: 1,
+          size: 30
+        },
+        {
+          id: 104,
+          label: 'Inbound\nMessaging',
+          group: 1,
+          shape: 'square',
+          start: 1,
+          size: 30
+        },
+        {
+          id: 105,
+          label: 'Real time\n Messaging',
+          group: 2,
+          shape: 'diamond',
+          start: 1
+        },
+        {
+          id: 106,
+          label: 'Batch\nmessaging',
+          group: 1,
+          shape: 'diamond',
+          start: 1
+        },
+        { id: 107, label: 'Hospital', group: 2, start: 1 },
+        { id: 108, label: 'General Practice', group: 3, start: 1 },
+        { id: 109, label: 'Community', group: 3, start: 2 },
+        { id: 110, label: 'Mental health', group: 1, start: 1 },
+        { id: 111, label: 'Out of Hours', group: 1, start: 1 },
+        { id: 112, label: 'End of Life', group: 1, start: 1, end: 6 },
+        { id: 113, label: 'Demographics', group: 1, start: 1 },
+        {
+          id: 114,
+          label: 'UHB Medway',
+          title: 'University Hospitals Bristol NHS - System C Medway',
+          group: 2,
+          shape: 'box',
+          start: 1
+        },
+        {
+          id: 115,
+          label: 'NBT Cerner',
+          title: 'North Bristol NHS Trust - Cerner Millennium',
+          group: 2,
+          shape: 'box',
+          start: 1,
+          end: 2
+        },
+        {
+          id: 116,
+          label: 'WAHT Cerner',
+          title: 'Weston Area Health Trust - Cerner Millennium',
+          group: 2,
+          shape: 'box',
+          start: 1
+        },
+        {
+          id: 117,
+          label: 'MH Appointments',
+          title: 'Mental Health Appointments',
+          group: 1,
+          start: 1
+        },
+        {
+          id: 118,
+          label: 'BrisDoc Adastra',
+          title: 'BrisDoc - Advanced Adastra',
+          group: 1,
+          shape: 'box',
+          start: 1
+        },
+        {
+          id: 119,
+          label: 'Exeter / NHIAS',
+          title:
+            'NHS National Health Application and Infrastructure Services (Exeter)',
+          group: 1,
+          shape: 'box',
+          start: 1,
+          end: 5
+        },
+        { id: 120, label: 'Adult\nSocial Care', group: 1, start: 1 },
+        { id: 121, label: 'Childrens\nSocial Care', group: 1, start: 4 },
+        {
+          id: 122,
+          label: 'BCC Liquidlogic LAS',
+          title:
+            "Bristol City Council - Liquidlogic Adults' Social Care System",
+          group: 1,
+          shape: 'box',
+          start: 2
+        },
+        {
+          id: 123,
+          label: 'SGC Mosiac',
+          title:
+            "South Gloucestershire Council - Servelec Mosaic Adults' Social Care System",
+          group: 1,
+          shape: 'box',
+          start: 7
+        },
+        {
+          id: 124,
+          label: 'NSC Liquidlogic LAS',
+          title:
+            "North Somerset Council - Liquidlogic Adults' Social Care System",
+          group: 1,
+          shape: 'box',
+          start: 8
+        },
+        {
+          id: 125,
+          label: 'BCC Liquidlogic LCS',
+          title:
+            "Bristol City Council - Liquidlogic Children's Social Care System",
+          group: 1,
+          shape: 'box',
+          start: 4
+        },
+        {
+          id: 126,
+          label: 'SGC Capita',
+          title: 'South Gloucestershire Council - Capita One',
+          group: 1,
+          shape: 'box',
+          start: 4,
+          end: 7
+        },
+        {
+          id: 127,
+          label: 'NSC Liquidlogic LCS',
+          title:
+            "North Somerset Council - Liquidlogic Children's Social Care System",
+          group: 1,
+          shape: 'box',
+          start: 4
+        },
+        { id: 128, label: 'MH Documents', group: 1, start: 7 },
+        {
+          id: 129,
+          label: 'BNSSG\nGP EMIS',
+          title:
+            'Bristol, North Somerset and South Gloucestershire - General Practice EMISWEB',
+          group: 3,
+          shape: 'box',
+          start: 1
+        },
+        {
+          id: 130,
+          label: 'BCH EMIS',
+          title: 'Bristol Community Health - Community EMISWEB',
+          group: 3,
+          shape: 'box',
+          start: 2
+        },
+        {
+          id: 131,
+          label: 'NSCP EMIS',
+          title: 'North Somerset Community Partnership - Community EMISWEB',
+          group: 3,
+          shape: 'box',
+          start: 2
+        },
+        {
+          id: 132,
+          label: 'Sirona EMIS',
+          title: 'Sirona - Community EMISWEB',
+          group: 3,
+          shape: 'box',
+          start: 2
+        },
+        { id: 133, label: 'HTML View', group: 3, shape: 'text', start: 1 },
+        {
+          id: 134,
+          label: 'MIG Patient Trace',
+          title:
+            'Healthcare Gateway Medical Interoperability Gateway - Patient Trace',
+          group: 3,
+          shape: 'square',
+          start: 1
+        },
+        {
+          id: 135,
+          label: 'Structured Data',
+          group: 3,
+          shape: 'text',
+          start: 6
+        },
+        {
+          id: 136,
+          label: 'MIG Inbound',
+          group: 3,
+          shape: 'triangle',
+          start: 1
+        },
+        {
+          id: 137,
+          label: 'MIG Patient Extract',
+          title:
+            'Healthcare Gateway Medical Interoperability Gateway - Patient Extract',
+          group: 3,
+          shape: 'square',
+          start: 1
+        },
+        { id: 138, label: 'End of Life', group: 3, start: 6 },
+        {
+          id: 139,
+          label: 'PDS Spine Cohort',
+          title: 'Personal Demographics Service - Spine Cohort',
+          group: 1,
+          shape: 'box',
+          start: 5
+        },
+        {
+          id: 140,
+          label: 'Portal Web Users',
+          group: 'usergroups',
+          start: 1,
+          size: 40
+        },
+        {
+          id: 141,
+          label: 'Context Launch',
+          group: 4,
+          shape: 'square',
+          start: 4
+        },
+        {
+          id: 142,
+          label: 'GP SSO Users',
+          title: 'General Practice - Single Sign On Users',
+          group: 'usergroups',
+          start: 4
+        },
+        {
+          id: 143,
+          label: 'BCH SSO Users',
+          title: 'Bristol Community Health - Single Sign On Users',
+          group: 'usergroups',
+          start: 4
+        },
+        {
+          id: 144,
+          label: 'NSCP SSO Users',
+          title: 'North Somerset Community Partnership - Single Sign On Users',
+          group: 'usergroups',
+          start: 4
+        },
+        {
+          id: 145,
+          label: 'Sirona SSO Users',
+          title: 'Sirona - Single Sign On Users',
+          group: 'usergroups',
+          start: 4
+        },
+        {
+          id: 146,
+          label: 'Medway SSO',
+          title: 'System C Medway - Single Sign On',
+          group: 4,
+          shape: 'triangle',
+          start: 6
+        },
+        {
+          id: 147,
+          label: 'UHB SSO Users',
+          title: 'University Hospitals Bristol NHS - Single Sign On Users',
+          group: 'usergroups',
+          start: 6
+        },
+        {
+          id: 148,
+          label: 'EMISWEB SSO',
+          title: 'EMISWEB - Single Sign On',
+          group: 4,
+          shape: 'triangle',
+          start: 4
+        },
+        { id: 149, label: 'Demographics', group: 3 },
+        {
+          id: 150,
+          cid: 1,
+          label: 'EMPI',
+          title: 'Enterprise Master Patient Index',
+          group: 0,
+          start: 1
+        },
+        {
+          id: 151,
+          cid: 1,
+          label: 'Rhapsody',
+          title: 'Rhapsody Integration Engine',
+          group: 0,
+          start: 1
+        },
+        {
+          id: 152,
+          label: 'CDR',
+          cid: 1,
+          title: 'Clinical Data Repository',
+          group: 0,
+          start: 1
+        },
+        {
+          id: 153,
+          label: 'TDS',
+          cid: 1,
+          title: 'Traceable Data Store',
+          group: 0,
+          start: 1
+        },
+        {
+          id: 154,
+          cid: 1,
+          label: 'XDS Registry',
+          title: 'Cross-Enterprise Document Sharing Registry',
+          group: 0,
+          start: 3
+        },
+        {
+          id: 155,
+          cid: 1,
+          label: 'XDS Repository',
+          title: 'Cross-Enterprise Document Sharing Repository',
+          group: 0,
+          start: 3
+        },
+        { id: 156, cid: 1, label: 'API Gateway', group: 0, start: 6 },
+        { id: 157, cid: 1, label: 'Encounters API', group: 0, start: 6 },
+        { id: 158, cid: 1, label: 'NEW Timeline', group: 0, start: 9 },
+        {
+          id: 160,
+          label: 'UHB/NBT\nSectra IEP',
+          group: 3,
+          shape: 'box',
+          start: 4,
+          end: 9
+        },
+        { id: 161, label: 'Radiology\nReports', group: 3, start: 4, end: 9 },
+        {
+          id: 162,
+          label: 'NBT CRIS',
+          title:
+            'North Bristol NHS Trust - Computerised Radiology Information System',
+          group: 2,
+          shape: 'box',
+          start: 9
+        },
+        {
+          id: 163,
+          label: 'UHB CRIS',
+          title:
+            'University Hospitals Bristol NHS - Computerised Radiology Information System',
+          group: 2,
+          shape: 'box',
+          start: 9
+        },
+        {
+          id: 164,
+          label: 'NSC Swift',
+          title: 'North Somerset Council - Swift',
+          group: 1,
+          shape: 'box',
+          start: 1,
+          end: 8
+        },
+        {
+          id: 165,
+          label: 'BCC Paris',
+          title: 'Bristol City Council - Swift',
+          group: 1,
+          shape: 'box',
+          start: 1,
+          end: 2
+        },
+        { id: 166, label: 'Community', group: 1, start: 1, end: 2 },
+        {
+          id: 167,
+          label: 'BCH RiO',
+          title: 'Bristol Community Health - Servelec RiO',
+          shape: 'box',
+          group: 1,
+          start: 1,
+          end: 2
+        },
+        {
+          id: 168,
+          label: 'NSCP RiO',
+          title: 'North Somerset Community Partnership - Servelec RiO',
+          shape: 'box',
+          group: 1,
+          start: 1,
+          end: 2
+        },
+        {
+          id: 169,
+          label: 'SGCCHS RiO',
+          title:
+            'South Gloucestershire Community Health Services - Servelec RiO',
+          shape: 'box',
+          group: 1,
+          start: 1,
+          end: 2
+        },
+        {
+          id: 170,
+          label: 'NBT Lorenzo',
+          title: 'North Bristol NHS Trust - DXC Lorenzo',
+          group: 2,
+          shape: 'box',
+          start: 2
+        },
+        {
+          id: 171,
+          label: 'ADT Data',
+          title: 'HL7 Admission, Discharge and Transfer Data',
+          group: 2,
+          start: 1
+        },
+        { id: 172, label: 'Documents', group: 2, start: 3 },
+        {
+          id: 173,
+          label: 'UHB CDS',
+          title: 'University Hospitals Bristol NHS - Clinical Document Service',
+          group: 2,
+          shape: 'box',
+          start: 3
+        },
+        {
+          id: 174,
+          label: 'Outbound\nMessaging',
+          group: 6,
+          shape: 'square',
+          start: 4,
+          size: 30,
+          mass: 10
+        },
+        {
+          id: 175,
+          label: 'ITK Document Delivery',
+          title: 'Interoperability Toolkit Document Delivery',
+          group: 6,
+          shape: 'diamond',
+          start: 4
+        },
+        {
+          id: 176,
+          label: 'MiG Document Service',
+          title:
+            'Healthcare Gateway Medical Interoperability Gateway - Document Service',
+          group: 6,
+          shape: 'triangle',
+          start: 4
+        },
+        {
+          id: 177,
+          label: 'BNSSG\nGP EMISWEB',
+          title:
+            'Bristol, North Somerset, South Gloucestershire - General Practice EMISWEB',
+          group: 6,
+          shape: 'box',
+          start: 4
+        },
+        {
+          id: 178,
+          label: 'SGC Swift',
+          title: 'South Gloucestershire Council - Northgate Swift',
+          group: 1,
+          shape: 'box',
+          start: 4
+        },
+        { id: 179, label: 'Organisational\nData', group: 1, start: 5 },
+        {
+          id: 180,
+          label: 'NHS Choices',
+          group: 1,
+          shape: 'box',
+          start: 5,
+          end: 7
+        },
+        {
+          id: 181,
+          label: 'Docman Hub',
+          group: 6,
+          shape: 'triangle',
+          start: 5
+        },
+        {
+          id: 182,
+          label: 'NBT Lorenzo MDM',
+          title:
+            'North Bristol NHS Trust  - DXC Lorenzo - HL7 Medical Document Management messages',
+          group: 2,
+          shape: 'box',
+          start: 6
+        },
+        {
+          id: 183,
+          label: 'NHS ODS FHIR',
+          title:
+            'NHS Organisation Data Service - Fast Healthcare Interoperability Resources',
+          group: 1,
+          shape: 'box',
+          start: 7
+        },
+        {
+          id: 184,
+          label: 'Person\nHealth Record',
+          group: 6,
+          shape: 'diamond',
+          start: 7
+        },
+        {
+          id: 185,
+          label: 'Patients Know Best',
+          group: 6,
+          shape: 'box',
+          start: 7
+        },
+        {
+          id: 186,
+          label: 'AWP RiO',
+          title: 'Avon and Wiltshire Mental Health Partnership - Servelec RiO',
+          group: 1,
+          shape: 'box',
+          start: 1
+        },
+        {
+          id: 187,
+          label: 'MH Enhanced',
+          title: 'Mental Health - Enhanced dataset',
+          group: 1,
+          start: 7
+        },
+        {
+          id: 188,
+          label: 'MT Rehab\nPrescription',
+          title: 'Major Trauma Rehabilitation Prescription',
+          group: 3,
+          start: 8
+        },
+        {
+          id: 189,
+          label: 'Patients Know Best',
+          group: 3,
+          shape: 'box',
+          start: 8
+        },
+        {
+          id: 190,
+          label: 'WAHT Cerner',
+          title: 'Weston Area Health Trust NHS - Cerner Millennium',
+          group: 2,
+          shape: 'box',
+          start: 8
+        },
+        {
+          id: 191,
+          label: 'UHB Patient Portal',
+          title: 'University Hospitals Bristol NHS - Patient Portal',
+          group: 6,
+          shape: 'box',
+          start: 9
+        },
+        {
+          id: 192,
+          label: 'MESH',
+          title: 'NHS Digital - Message Exchange for Social Care and Health',
+          group: 6,
+          shape: 'triangle',
+          start: 9
+        },
+        {
+          id: 193,
+          label: 'National GP',
+          group: 6,
+          shape: 'box',
+          start: 9
+        },
+        {
+          id: 194,
+          label: 'Lorenzo SSO',
+          title: 'DXC Lorenzo - Single Sign On',
+          group: 4,
+          shape: 'triangle',
+          start: 9
+        },
+        {
+          id: 195,
+          label: 'NBT SSO Users',
+          title: 'North Bristol NHS Trust  - Single Sign On Users',
+          group: 'usergroups',
+          start: 9
+        },
+        { id: 196, label: 'Radiology Reports', group: 2, start: 9 },
+        { id: 197, label: 'Controlled\nMedications', group: 3, start: 7 },
+        {
+          id: 198,
+          label: 'BCC Theseus ',
+          title: 'Bristol City Council - Cyber Media Theseus',
+          group: 3,
+          shape: 'box',
+          start: 7
+        },
+        {
+          id: 199,
+          label: 'GP Journal View',
+          group: 3,
+          shape: 'text',
+          start: 7
+        },
+        {
+          id: 200,
+          label: 'CCHP SSO Users',
+          title:
+            "Community Children's Health Partnership - Single Sign On Users",
+          group: 'usergroups',
+          start: 9
+        },
+        {
+          id: 201,
+          label: 'CCHP EMIS',
+          title: "Community Children's Health Partnership - EMISWEB",
+          group: 3,
+          shape: 'box',
+          start: 9
+        }
+      ])
+
+      // create an array with edges
+      var allEdges = new vis.DataSet([
+        { from: 197, to: 103 },
+        { from: 198, to: 197 },
+        { from: 162, to: 196 },
+        { from: 163, to: 196 },
+        { from: 196, to: 107 },
+        { from: 141, to: 194, dashes: true },
+        { from: 194, to: 195, dashes: true },
+        { from: 192, to: 177 },
+        { from: 192, to: 193 },
+        { from: 175, to: 192 },
+        { from: 184, to: 191 },
+        { from: 190, to: 172 },
+        { from: 189, to: 188 },
+        { from: 188, to: 103 },
+        { from: 186, to: 187 },
+        { from: 187, to: 110 },
+        { from: 186, to: 117 },
+        { from: 184, to: 185 },
+        { from: 174, to: 184 },
+        { from: 183, to: 179 },
+        { from: 182, to: 172 },
+        { from: 181, to: 177 },
+        { from: 175, to: 181 },
+        { from: 180, to: 179 },
+        { from: 179, to: 106 },
+        { from: 178, to: 120 },
+        { from: 176, to: 177 },
+        { from: 175, to: 176 },
+        { from: 174, to: 175 },
+        { from: 102, to: 174, arrows: 'to' },
+        { from: 173, to: 172 },
+        { from: 172, to: 107 },
+        { from: 171, to: 107 },
+        { from: 101, to: 102 },
+        { from: 103, to: 101, arrows: 'to' },
+        { from: 104, to: 102, arrows: 'to' },
+        { from: 105, to: 104 },
+        { from: 106, to: 104 },
+        { from: 107, to: 105 },
+        { from: 110, to: 106 },
+        { from: 111, to: 106 },
+        { from: 112, to: 106 },
+        { from: 113, to: 106 },
+        { from: 114, to: 171 },
+        { from: 115, to: 171 },
+        { from: 116, to: 171 },
+        { from: 117, to: 110 },
+        { from: 118, to: 111 },
+        { from: 112, to: 118 },
+        { from: 119, to: 113 },
+        { from: 139, to: 113 },
+        { from: 120, to: 106 },
+        { from: 121, to: 106 },
+        { from: 122, to: 120 },
+        { from: 123, to: 121 },
+        { from: 124, to: 120 },
+        { from: 125, to: 121 },
+        { from: 126, to: 121 },
+        { from: 127, to: 121 },
+        { from: 128, to: 110 },
+        { from: 128, to: 186 },
+
+        { from: 134, to: 136 },
+        { from: 129, to: 108 },
+        { from: 130, to: 109 },
+        { from: 131, to: 109 },
+        { from: 132, to: 109 },
+        { from: 201, to: 109 },
+        { from: 133, to: 137 },
+        { from: 199, to: 137 },
+        { from: 135, to: 137 },
+        { from: 108, to: 136 },
+        { from: 109, to: 136 },
+        { from: 136, to: 103 },
+        { from: 137, to: 136 },
+        { from: 138, to: 136 },
+        { from: 129, to: 138 },
+        { from: 140, to: 101, dashes: true },
+        { from: 141, to: 101, dashes: true },
+        { from: 142, to: 148, dashes: true },
+        { from: 143, to: 148, dashes: true },
+        { from: 144, to: 148, dashes: true },
+        { from: 145, to: 148, dashes: true },
+        { from: 146, to: 141, dashes: true },
+        { from: 147, to: 146, dashes: true },
+        { from: 148, to: 141, dashes: true },
+        { from: 148, to: 200, dashes: true },
+        { from: 149, to: 136 },
+
+        { from: 158, to: 101 },
+        { from: 150, to: 102 },
+        { from: 151, to: 102 },
+        { from: 152, to: 102 },
+        { from: 153, to: 102 },
+        { from: 154, to: 102 },
+        { from: 155, to: 102 },
+        { from: 156, to: 102 },
+        { from: 157, to: 156 },
+
+        { from: 161, to: 103 },
+        { from: 160, to: 161 },
+
+        { from: 164, to: 120 },
+
+        { from: 165, to: 120 },
+        { from: 166, to: 106 },
+        { from: 167, to: 166 },
+        { from: 168, to: 166 },
+        { from: 169, to: 166 },
+
+        { from: 170, to: 171 }
+      ])
+
+      var edges = new vis.DataSet([])
+      var nodes = new vis.DataSet([])
+
+      updatePosition(1)
+
+      // create a network
+      var container = document.getElementById('mynetwork')
+      var data = {
+        nodes: nodes,
+        edges: allEdges
+      }
+      var options = {
+        nodes: {
+          borderWidth: 2,
+          shadow: true
+        },
+        edges: {
+          width: 2,
+          shadow: true,
+          smooth: {
+            forceDirection: 'none'
+          }
+        },
+        groups: {
+          usergroups: {
+            shape: 'icon',
+            icon: {
+              face: 'FontAwesome',
+              code: '\uf0c0',
+              size: 50,
+              color: '#8c51cf'
+            }
+          },
+          users: {
+            shape: 'icon',
+            icon: {
+              face: 'FontAwesome',
+              code: '\uf007',
+              size: 50,
+              color: '#aa00ff'
+            }
+          },
+          physics: {
+            minVelocity: 0.75
+          }
+        }
+      }
+      var network = new vis.Network(container, data, options)
+
+      function updatePositionAndSelect(newPos) {
+        var ret = updatePosition(newPos)
+        network.selectNodes(ret.ids)
+        document.getElementById('desc').value =
+          'Added: ' +
+          ret.newLabels.join(', ') +
+          '\nRemoved: ' +
+          ret.oldLabels.join(', ')
+      }
+
+      function changePos() {
+        var newPos = document.getElementById('pos').value
+        updatePositionAndSelect(newPos)
+        pos = newPos
+      }
+
+      function clickIncrPos() {
+        document.getElementById('pos').value++
+        $('[data-toggle="popover"]').popover('hide')
+        $('#pagination')
+          .children()
+          .last()
+          .before(
+            `<li class="page-item disabled" data-toggle="popover" id="pop${pos}"
+            data-content="${posArray[pos].comment}"
+            data-html="true"
+            data-placement="bottom"><a class="page-link">${posArray[pos].stage}</a></li>`
+          )
+        $(`#pop${pos}`).popover()
+        $(`#pop${pos}`).popover('show')
+        changePos()
+        if (pos == posArray.length) {
+          $('#pagination')
+            .children()
+            .last()
+            .remove()
+          $('#finalbuttongroup').show('fast')
+        }
+      }
+      function clickRemove() {
+        var ids = []
+        var noGrpNodes = nodes.get({
+          filter: function(n) {
+            return n.group == undefined
+          }
+        })
+
+        noGrpNodes.forEach(n => {
+          nodes.update([
+            {
+              id: n.id,
+              hidden: true
+            }
+          ])
+        })
+      }
+      function clusterByCid() {
+        //network.setData(data)
+        var clusterOptionsByData = {
+          joinCondition: function(childOptions) {
+            return childOptions.cid == 1
+          },
+          clusterNodeProperties: {
+            id: 'cidCluster',
+            label: 'Connecting Care',
+            shape: 'dot',
+            size: 80
+          }
+        }
+        network.cluster(clusterOptionsByData)
+      }
+    </script>
+    <script
+      src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+      integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      $(function() {
+        $('[data-toggle="popover"]').popover()
+        $('#pop0').popover('show')
+      })
+    </script>
+  </body>
+</html>
