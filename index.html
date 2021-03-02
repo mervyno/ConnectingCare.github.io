@@ -8,7 +8,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
-    <title>Connecting Care</title>
+    <title>Connecting Care - Joss's farewell edition</title>
 
     <script src="https://unpkg.com/vis-network@8.5.6/dist/vis-network.min.js"></script>
     <link
@@ -16,9 +16,19 @@
       rel="stylesheet"
       type="text/css"
     />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css" integrity="sha512-oc9+XSs1H243/FRN9Rw62Fn8EtxjEYWHXRvjS43YtueEewbS6ObfXcJNyohjHqVKFPoXXUxwc+q1K7Dee6vv9g==" crossorigin="anonymous" />
-    
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"
+      integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA=="
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.3/css/bootstrap.min.css"
+      integrity="sha512-oc9+XSs1H243/FRN9Rw62Fn8EtxjEYWHXRvjS43YtueEewbS6ObfXcJNyohjHqVKFPoXXUxwc+q1K7Dee6vv9g=="
+      crossorigin="anonymous"
+    />
+
     <style>
       #mynetwork {
         width: 100vw;
@@ -30,14 +40,17 @@
         right: 0px;
         margin: 0px auto;
       }
+
       nav {
         padding-top: 5px;
       }
+
       .starthidden {
         display: none;
       }
     </style>
   </head>
+
   <body>
     <div class="container-fluid">
       <input type="hidden" name="pos" id="pos" value="1" />
@@ -88,7 +101,7 @@
         id="desc"
         class="form-control"
         rows="2"
-        style="position: absolute;bottom: 0;width: 98vw;bottom: 5px;"
+        style="position: absolute; bottom: 0; width: 98vw; bottom: 5px"
         hidden="hidden"
       >
 Phase 1</textarea
@@ -101,37 +114,52 @@ Phase 1</textarea
       var posArray = [
         {
           stage: '2014',
-          comment: 'December 2014:<br>504 users, viewed 5,725 records'
+          comment: 'December 2014:<br>504 users, viewed 5,725 records',
         },
         {
           stage: '2015',
-          comment: 'December 2015:<br>1,208 users, viewed 6,290 records'
+          comment: 'December 2015:<br>1,208 users, viewed 6,290 records',
         },
         {
           stage: '2016',
-          comment: 'December 2016:<br>1,624 users, viewed 9,147 records'
+          comment: 'December 2016:<br>1,624 users, viewed 9,147 records',
         },
         {
           stage: '2017-H1',
-          comment: 'June 2017:<br>1,887 users, viewed 11,125 records'
+          comment: 'June 2017:<br>1,887 users, viewed 11,125 records',
         },
         {
           stage: '2017-H2',
-          comment: 'December 2017:<br>3,568 users, viewed 13,438 records'
+          comment: 'December 2017:<br>3,568 users, viewed 13,438 records',
         },
         {
           stage: '2018-H1',
-          comment: 'June 2018:<br>5,832 users, viewed 21,036 records'
+          comment: 'June 2018:<br>5,832 users, viewed 21,036 records',
         },
         {
           stage: '2018-H2',
-          comment: 'December 2018:<br>5,304 users, viewed 27,384 records'
+          comment: 'December 2018:<br>5,304 users, viewed 27,384 records',
         },
         {
           stage: '2019-H1',
-          comment: 'June 2019:<br>5,827 users, viewed 36,213 records'
+          comment: 'June 2019:<br>5,827 users, viewed 36,213 records',
         },
-        { stage: '2019-H2', comment: '' }
+        {
+          stage: '2019-H2',
+          comment: 'December 2019:<br>6,844 users, viewed 46,442 records',
+        },
+        {
+          stage: '2020-H1',
+          comment: 'June 2020:<br>7,065 users, viewed 60,548 records',
+        },
+        {
+          stage: '2020-H2',
+          comment: 'December 2020:<br>7,455 users, viewed 64,474 records',
+        },
+        {
+          stage: '2021-H1',
+          comment: 'Connecting Care says goodbye to Joss',
+        },
       ]
 
       function updatePosition(newPos) {
@@ -139,13 +167,13 @@ Phase 1</textarea
         var oldLabels = []
         var newLabels = []
         var oldNodes = allNodes.get({
-          filter: function(n) {
+          filter: function (n) {
             return n.end == newPos
-          }
+          },
         })
 
         var removedLabels = []
-        oldNodes.forEach(n => {
+        oldNodes.forEach((n) => {
           ids.push(n.id)
           oldLabels.push(n.label)
           nodes.update([
@@ -153,18 +181,18 @@ Phase 1</textarea
               id: n.id,
               color: 'lightgrey',
               font: { color: 'grey' },
-              group: undefined
-            }
+              group: undefined,
+            },
           ])
         })
 
         var newNodes = allNodes.get({
-          filter: function(n) {
+          filter: function (n) {
             return n.start == newPos
-          }
+          },
         })
 
-        newNodes.forEach(n => {
+        newNodes.forEach((n) => {
           nodes.add(n)
           ids.push(n.id)
           newLabels.push(n.label)
@@ -183,7 +211,7 @@ Phase 1</textarea
           group: 0,
           shape: 'dot',
           size: 40,
-          start: 1
+          start: 1,
         },
         {
           id: 102,
@@ -193,7 +221,7 @@ Phase 1</textarea
           group: 0,
           shape: 'dot',
           size: 40,
-          start: 1
+          start: 1,
         },
         {
           id: 103,
@@ -201,7 +229,7 @@ Phase 1</textarea
           group: 3,
           shape: 'square',
           start: 1,
-          size: 30
+          size: 30,
         },
         {
           id: 104,
@@ -209,21 +237,21 @@ Phase 1</textarea
           group: 1,
           shape: 'square',
           start: 1,
-          size: 30
+          size: 30,
         },
         {
           id: 105,
           label: 'Real time\n Messaging',
           group: 2,
           shape: 'diamond',
-          start: 1
+          start: 1,
         },
         {
           id: 106,
           label: 'Batch\nmessaging',
           group: 1,
           shape: 'diamond',
-          start: 1
+          start: 1,
         },
         { id: 107, label: 'Hospital', group: 2, start: 1 },
         { id: 108, label: 'General Practice', group: 3, start: 1 },
@@ -238,7 +266,7 @@ Phase 1</textarea
           title: 'University Hospitals Bristol NHS - System C Medway',
           group: 2,
           shape: 'box',
-          start: 1
+          start: 1,
         },
         {
           id: 115,
@@ -247,7 +275,7 @@ Phase 1</textarea
           group: 2,
           shape: 'box',
           start: 1,
-          end: 2
+          end: 2,
         },
         {
           id: 116,
@@ -255,22 +283,23 @@ Phase 1</textarea
           title: 'Weston Area Health Trust - Cerner Millennium',
           group: 2,
           shape: 'box',
-          start: 1
+          start: 1,
+          end: 11,
         },
         {
           id: 117,
           label: 'MH Appointments',
           title: 'Mental Health Appointments',
           group: 1,
-          start: 1
+          start: 1,
         },
         {
           id: 118,
-          label: 'BrisDoc Adastra',
-          title: 'BrisDoc - Advanced Adastra',
+          label: 'BrisDoc\nSevernSide IUC Adastra',
+          title: 'BrisDoc/SevernSide IUC - Advanced Adastra',
           group: 1,
           shape: 'box',
-          start: 1
+          start: 1,
         },
         {
           id: 119,
@@ -280,7 +309,7 @@ Phase 1</textarea
           group: 1,
           shape: 'box',
           start: 1,
-          end: 5
+          end: 5,
         },
         { id: 120, label: 'Adult\nSocial Care', group: 1, start: 1 },
         { id: 121, label: 'Childrens\nSocial Care', group: 1, start: 4 },
@@ -291,7 +320,7 @@ Phase 1</textarea
             "Bristol City Council - Liquidlogic Adults' Social Care System",
           group: 1,
           shape: 'box',
-          start: 2
+          start: 2,
         },
         {
           id: 123,
@@ -300,7 +329,7 @@ Phase 1</textarea
             "South Gloucestershire Council - Servelec Mosaic Adults' Social Care System",
           group: 1,
           shape: 'box',
-          start: 7
+          start: 7,
         },
         {
           id: 124,
@@ -309,7 +338,7 @@ Phase 1</textarea
             "North Somerset Council - Liquidlogic Adults' Social Care System",
           group: 1,
           shape: 'box',
-          start: 8
+          start: 8,
         },
         {
           id: 125,
@@ -318,7 +347,7 @@ Phase 1</textarea
             "Bristol City Council - Liquidlogic Children's Social Care System",
           group: 1,
           shape: 'box',
-          start: 4
+          start: 4,
         },
         {
           id: 126,
@@ -327,7 +356,7 @@ Phase 1</textarea
           group: 1,
           shape: 'box',
           start: 4,
-          end: 7
+          end: 7,
         },
         {
           id: 127,
@@ -336,7 +365,7 @@ Phase 1</textarea
             "North Somerset Council - Liquidlogic Children's Social Care System",
           group: 1,
           shape: 'box',
-          start: 4
+          start: 4,
         },
         { id: 128, label: 'MH Documents', group: 1, start: 7 },
         {
@@ -346,7 +375,7 @@ Phase 1</textarea
             'Bristol, North Somerset and South Gloucestershire - General Practice EMISWEB',
           group: 3,
           shape: 'box',
-          start: 1
+          start: 1,
         },
         {
           id: 130,
@@ -354,7 +383,8 @@ Phase 1</textarea
           title: 'Bristol Community Health - Community EMISWEB',
           group: 3,
           shape: 'box',
-          start: 2
+          start: 2,
+          end: 10,
         },
         {
           id: 131,
@@ -362,7 +392,8 @@ Phase 1</textarea
           title: 'North Somerset Community Partnership - Community EMISWEB',
           group: 3,
           shape: 'box',
-          start: 2
+          start: 2,
+          end: 10,
         },
         {
           id: 132,
@@ -370,7 +401,7 @@ Phase 1</textarea
           title: 'Sirona - Community EMISWEB',
           group: 3,
           shape: 'box',
-          start: 2
+          start: 2,
         },
         { id: 133, label: 'HTML View', group: 3, shape: 'text', start: 1 },
         {
@@ -380,21 +411,21 @@ Phase 1</textarea
             'Healthcare Gateway Medical Interoperability Gateway - Patient Trace',
           group: 3,
           shape: 'square',
-          start: 1
+          start: 1,
         },
         {
           id: 135,
           label: 'Structured Data',
           group: 3,
           shape: 'text',
-          start: 6
+          start: 6,
         },
         {
           id: 136,
           label: 'MIG Inbound',
           group: 3,
           shape: 'triangle',
-          start: 1
+          start: 1,
         },
         {
           id: 137,
@@ -403,7 +434,7 @@ Phase 1</textarea
             'Healthcare Gateway Medical Interoperability Gateway - Patient Extract',
           group: 3,
           shape: 'square',
-          start: 1
+          start: 1,
         },
         { id: 138, label: 'End of Life', group: 3, start: 6 },
         {
@@ -412,49 +443,51 @@ Phase 1</textarea
           title: 'Personal Demographics Service - Spine Cohort',
           group: 1,
           shape: 'box',
-          start: 5
+          start: 5,
         },
         {
           id: 140,
           label: 'Portal Web Users',
           group: 'usergroups',
           start: 1,
-          size: 40
+          size: 40,
         },
         {
           id: 141,
           label: 'Context Launch',
           group: 4,
           shape: 'square',
-          start: 4
+          start: 4,
         },
         {
           id: 142,
           label: 'GP SSO Users',
           title: 'General Practice - Single Sign On Users',
           group: 'usergroups',
-          start: 4
+          start: 4,
         },
         {
           id: 143,
           label: 'BCH SSO Users',
           title: 'Bristol Community Health - Single Sign On Users',
           group: 'usergroups',
-          start: 4
+          start: 4,
+          end: 10,
         },
         {
           id: 144,
           label: 'NSCP SSO Users',
           title: 'North Somerset Community Partnership - Single Sign On Users',
           group: 'usergroups',
-          start: 4
+          start: 4,
+          end: 10,
         },
         {
           id: 145,
           label: 'Sirona SSO Users',
           title: 'Sirona - Single Sign On Users',
           group: 'usergroups',
-          start: 4
+          start: 4,
         },
         {
           id: 146,
@@ -462,14 +495,14 @@ Phase 1</textarea
           title: 'System C Medway - Single Sign On',
           group: 4,
           shape: 'triangle',
-          start: 6
+          start: 6,
         },
         {
           id: 147,
           label: 'UHB SSO Users',
           title: 'University Hospitals Bristol NHS - Single Sign On Users',
           group: 'usergroups',
-          start: 6
+          start: 6,
         },
         {
           id: 148,
@@ -477,7 +510,7 @@ Phase 1</textarea
           title: 'EMISWEB - Single Sign On',
           group: 4,
           shape: 'triangle',
-          start: 4
+          start: 4,
         },
         { id: 149, label: 'Demographics', group: 3 },
         {
@@ -486,7 +519,7 @@ Phase 1</textarea
           label: 'EMPI',
           title: 'Enterprise Master Patient Index',
           group: 0,
-          start: 1
+          start: 1,
         },
         {
           id: 151,
@@ -494,7 +527,7 @@ Phase 1</textarea
           label: 'Rhapsody',
           title: 'Rhapsody Integration Engine',
           group: 0,
-          start: 1
+          start: 1,
         },
         {
           id: 152,
@@ -502,7 +535,7 @@ Phase 1</textarea
           cid: 1,
           title: 'Clinical Data Repository',
           group: 0,
-          start: 1
+          start: 1,
         },
         {
           id: 153,
@@ -510,7 +543,7 @@ Phase 1</textarea
           cid: 1,
           title: 'Traceable Data Store',
           group: 0,
-          start: 1
+          start: 1,
         },
         {
           id: 154,
@@ -518,7 +551,7 @@ Phase 1</textarea
           label: 'XDS Registry',
           title: 'Cross-Enterprise Document Sharing Registry',
           group: 0,
-          start: 3
+          start: 3,
         },
         {
           id: 155,
@@ -526,18 +559,18 @@ Phase 1</textarea
           label: 'XDS Repository',
           title: 'Cross-Enterprise Document Sharing Repository',
           group: 0,
-          start: 3
+          start: 3,
         },
         { id: 156, cid: 1, label: 'API Gateway', group: 0, start: 6 },
         { id: 157, cid: 1, label: 'Encounters API', group: 0, start: 6 },
-        { id: 158, cid: 1, label: 'NEW Timeline', group: 0, start: 9 },
+        { id: 158, cid: 1, label: 'Timeline', group: 0, start: 9 },
         {
           id: 160,
           label: 'UHB/NBT\nSectra IEP',
           group: 3,
           shape: 'box',
           start: 4,
-          end: 9
+          end: 9,
         },
         { id: 161, label: 'Radiology\nReports', group: 3, start: 4, end: 9 },
         {
@@ -547,7 +580,7 @@ Phase 1</textarea
             'North Bristol NHS Trust - Computerised Radiology Information System',
           group: 2,
           shape: 'box',
-          start: 9
+          start: 9,
         },
         {
           id: 163,
@@ -556,7 +589,7 @@ Phase 1</textarea
             'University Hospitals Bristol NHS - Computerised Radiology Information System',
           group: 2,
           shape: 'box',
-          start: 9
+          start: 9,
         },
         {
           id: 164,
@@ -565,7 +598,7 @@ Phase 1</textarea
           group: 1,
           shape: 'box',
           start: 1,
-          end: 8
+          end: 8,
         },
         {
           id: 165,
@@ -574,7 +607,7 @@ Phase 1</textarea
           group: 1,
           shape: 'box',
           start: 1,
-          end: 2
+          end: 2,
         },
         { id: 166, label: 'Community', group: 1, start: 1, end: 2 },
         {
@@ -584,7 +617,7 @@ Phase 1</textarea
           shape: 'box',
           group: 1,
           start: 1,
-          end: 2
+          end: 2,
         },
         {
           id: 168,
@@ -593,7 +626,7 @@ Phase 1</textarea
           shape: 'box',
           group: 1,
           start: 1,
-          end: 2
+          end: 2,
         },
         {
           id: 169,
@@ -603,7 +636,7 @@ Phase 1</textarea
           shape: 'box',
           group: 1,
           start: 1,
-          end: 2
+          end: 2,
         },
         {
           id: 170,
@@ -611,14 +644,14 @@ Phase 1</textarea
           title: 'North Bristol NHS Trust - DXC Lorenzo',
           group: 2,
           shape: 'box',
-          start: 2
+          start: 2,
         },
         {
           id: 171,
           label: 'ADT Data',
           title: 'HL7 Admission, Discharge and Transfer Data',
           group: 2,
-          start: 1
+          start: 1,
         },
         { id: 172, label: 'Documents', group: 2, start: 3 },
         {
@@ -627,7 +660,7 @@ Phase 1</textarea
           title: 'University Hospitals Bristol NHS - Clinical Document Service',
           group: 2,
           shape: 'box',
-          start: 3
+          start: 3,
         },
         {
           id: 174,
@@ -636,7 +669,7 @@ Phase 1</textarea
           shape: 'square',
           start: 4,
           size: 30,
-          mass: 10
+          mass: 10,
         },
         {
           id: 175,
@@ -644,7 +677,7 @@ Phase 1</textarea
           title: 'Interoperability Toolkit Document Delivery',
           group: 6,
           shape: 'diamond',
-          start: 4
+          start: 4,
         },
         {
           id: 176,
@@ -653,7 +686,7 @@ Phase 1</textarea
             'Healthcare Gateway Medical Interoperability Gateway - Document Service',
           group: 6,
           shape: 'triangle',
-          start: 4
+          start: 4,
         },
         {
           id: 177,
@@ -662,7 +695,7 @@ Phase 1</textarea
             'Bristol, North Somerset, South Gloucestershire - General Practice EMISWEB',
           group: 6,
           shape: 'box',
-          start: 4
+          start: 4,
         },
         {
           id: 178,
@@ -670,7 +703,7 @@ Phase 1</textarea
           title: 'South Gloucestershire Council - Northgate Swift',
           group: 1,
           shape: 'box',
-          start: 4
+          start: 4,
         },
         { id: 179, label: 'Organisational\nData', group: 1, start: 5 },
         {
@@ -679,14 +712,14 @@ Phase 1</textarea
           group: 1,
           shape: 'box',
           start: 5,
-          end: 7
+          end: 7,
         },
         {
           id: 181,
           label: 'Docman Hub',
           group: 6,
           shape: 'triangle',
-          start: 5
+          start: 5,
         },
         {
           id: 182,
@@ -695,7 +728,7 @@ Phase 1</textarea
             'North Bristol NHS Trust  - DXC Lorenzo - HL7 Medical Document Management messages',
           group: 2,
           shape: 'box',
-          start: 6
+          start: 6,
         },
         {
           id: 183,
@@ -704,21 +737,21 @@ Phase 1</textarea
             'NHS Organisation Data Service - Fast Healthcare Interoperability Resources',
           group: 1,
           shape: 'box',
-          start: 7
+          start: 7,
         },
         {
           id: 184,
           label: 'Person\nHealth Record',
           group: 6,
           shape: 'diamond',
-          start: 7
+          start: 7,
         },
         {
           id: 185,
-          label: 'Patients Know Best',
+          label: 'NBT Patients Know Best',
           group: 6,
           shape: 'box',
-          start: 7
+          start: 7,
         },
         {
           id: 186,
@@ -726,28 +759,30 @@ Phase 1</textarea
           title: 'Avon and Wiltshire Mental Health Partnership - Servelec RiO',
           group: 1,
           shape: 'box',
-          start: 1
+          start: 1,
         },
         {
           id: 187,
           label: 'MH Enhanced',
           title: 'Mental Health - Enhanced dataset',
           group: 1,
-          start: 7
+          start: 7,
         },
         {
           id: 188,
           label: 'MT Rehab\nPrescription',
           title: 'Major Trauma Rehabilitation Prescription',
           group: 3,
-          start: 8
+          start: 8,
+          end: 11,
         },
         {
           id: 189,
-          label: 'Patients Know Best',
+          label: 'NBT Patients Know Best',
           group: 3,
           shape: 'box',
-          start: 8
+          start: 8,
+          end: 11,
         },
         {
           id: 190,
@@ -755,7 +790,7 @@ Phase 1</textarea
           title: 'Weston Area Health Trust NHS - Cerner Millennium',
           group: 2,
           shape: 'box',
-          start: 8
+          start: 8,
         },
         {
           id: 191,
@@ -763,37 +798,39 @@ Phase 1</textarea
           title: 'University Hospitals Bristol NHS - Patient Portal',
           group: 6,
           shape: 'box',
-          start: 9
+          start: 9,
         },
+        /*
         {
           id: 192,
           label: 'MESH',
           title: 'NHS Digital - Message Exchange for Social Care and Health',
           group: 6,
           shape: 'triangle',
-          start: 9
+          start: 9,
         },
         {
           id: 193,
           label: 'National GP',
           group: 6,
           shape: 'box',
-          start: 9
+          start: 9,
         },
+        */
         {
           id: 194,
           label: 'Lorenzo SSO',
           title: 'DXC Lorenzo - Single Sign On',
           group: 4,
           shape: 'triangle',
-          start: 9
+          start: 11,
         },
         {
           id: 195,
           label: 'NBT SSO Users',
           title: 'North Bristol NHS Trust  - Single Sign On Users',
           group: 'usergroups',
-          start: 9
+          start: 11,
         },
         { id: 196, label: 'Radiology Reports', group: 2, start: 9 },
         { id: 197, label: 'Controlled\nMedications', group: 3, start: 7 },
@@ -803,14 +840,14 @@ Phase 1</textarea
           title: 'Bristol City Council - Cyber Media Theseus',
           group: 3,
           shape: 'box',
-          start: 7
+          start: 7,
         },
         {
           id: 199,
           label: 'GP Journal View',
           group: 3,
           shape: 'text',
-          start: 7
+          start: 7,
         },
         {
           id: 200,
@@ -818,7 +855,7 @@ Phase 1</textarea
           title:
             "Community Children's Health Partnership - Single Sign On Users",
           group: 'usergroups',
-          start: 9
+          start: 9,
         },
         {
           id: 201,
@@ -826,12 +863,152 @@ Phase 1</textarea
           title: "Community Children's Health Partnership - EMISWEB",
           group: 3,
           shape: 'box',
-          start: 9
-        }
+          start: 9,
+        },
+        { id: 202, cid: 1, label: 'UX/Dashboards', group: 0, start: 9 },
+        {
+          id: 203,
+          label: 'PEM',
+          title: 'Post Event Message',
+          group: 1,
+          start: 10,
+        },
+        { id: 204, label: 'BNSSG CCG', group: 1, start: 10 },
+        { id: 205, label: 'Charlson Score', group: 1, start: 10 },
+        { id: 206, label: 'COVID-19\nRisk Category', group: 3, start: 10 },
+        { id: 207, label: 'Pathology', group: 2, start: 10 },
+        { id: 208, label: 'NBT WinPath', group: 2, start: 10 },
+        { id: 209, label: 'Demographics', group: 3, start: 11 },
+        {
+          id: 210,
+          label: 'PDS Spine Mini Service',
+          title: 'PDS Spine Mini Service - NHSD',
+          group: 3,
+          shape: 'box',
+          start: 11,
+        },
+        {
+          id: 211,
+          label: 'WAHT Medway',
+          title: 'Weston Area Health Trust - System C Medway',
+          group: 2,
+          shape: 'box',
+          start: 11,
+        },
+        {
+          id: 212,
+          label: 'WAHT SSO Users',
+          title: 'Weston Area Health Trust NHS - Single Sign On Users',
+          group: 'usergroups',
+          start: 11,
+        },
+        {
+          id: 213,
+          label: 'Demographics cohort',
+          group: 6,
+          shape: 'diamond',
+          start: 11,
+        },
+        {
+          id: 214,
+          label: 'UHB CareFlow Connect',
+          title: 'University Hospitals Bristol NHS - System C CareFlow Connect',
+          group: 6,
+          shape: 'box',
+          start: 11,
+        },
+        {
+          id: 215,
+          cid: 1,
+          label: 'CICB',
+          title: 'Community Integrated Care Bureau',
+          group: 0,
+          start: 12,
+        },
+        {
+          id: 216,
+          cid: 1,
+          label: 'Care Pathways',
+          title: 'Care Pathways (Forms)',
+          group: 0,
+          start: 12,
+        },
+        {
+          id: 217,
+          cid: 1,
+          label: 'Collaborative Worklists',
+          title: 'Collaborative Worklists',
+          group: 0,
+          start: 12,
+        },
+        { id: 218, label: 'Care Home\nHospital Pack', group: 3, start: 12 },
+        {
+          id: 219,
+          label: 'PCS',
+          title: 'Person Centered Software',
+          group: 3,
+          shape: 'box',
+          start: 12,
+        },
+        {
+          id: 220,
+          label: 'NBT My Medical Record',
+          title: 'North Bristol Trust NHS - My Medical Record',
+          group: 6,
+          shape: 'box',
+          start: 12,
+        },
+        { id: 221, label: 'UHBW Bristol WinPath', group: 2, start: 12 },
+        { id: 222, label: 'UHBW Weston WinPath', group: 2, start: 12 },
+        {
+          id: 223,
+          label: 'Population\nHealth Management',
+          group: 6,
+          shape: 'diamond',
+          start: 12,
+        },
+        {
+          id: 224,
+          label: 'Adult Social Care',
+          title: 'Adult Social Care - Population Health Management',
+          group: 6,
+          shape: 'triangle',
+          start: 12,
+        },
+        {
+          id: 225,
+          label: 'BNSSG CCG',
+          title: 'Bristol, North Somerset, South Gloucestershire CCG',
+          group: 6,
+          shape: 'box',
+          start: 12,
+        },
       ])
 
       // create an array with edges
       var allEdges = new vis.DataSet([
+        { from: 174, to: 223 },
+        { from: 223, to: 224 },
+        { from: 224, to: 225 },
+        { from: 221, to: 207 },
+        { from: 222, to: 207 },
+        { from: 220, to: 184 },
+        { from: 219, to: 218 },
+        { from: 218, to: 103 },
+        { from: 216, to: 102 },
+        { from: 217, to: 102 },
+        { from: 215, to: 101 },
+        { from: 174, to: 213 },
+        { from: 213, to: 214 },
+        { from: 212, to: 146, dashes: true },
+
+        { from: 211, to: 171 },
+        { from: 210, to: 209 },
+        { from: 209, to: 103 },
+        { from: 129, to: 206 },
+        { from: 206, to: 136 },
+        { from: 208, to: 207 },
+        { from: 207, to: 107 },
         { from: 197, to: 103 },
         { from: 198, to: 197 },
         { from: 162, to: 196 },
@@ -839,8 +1016,8 @@ Phase 1</textarea
         { from: 196, to: 107 },
         { from: 141, to: 194, dashes: true },
         { from: 194, to: 195, dashes: true },
-        { from: 192, to: 177 },
-        { from: 192, to: 193 },
+        /*{ from: 192, to: 177 },
+        { from: 192, to: 193 },*/
         { from: 175, to: 192 },
         { from: 184, to: 191 },
         { from: 190, to: 172 },
@@ -880,11 +1057,18 @@ Phase 1</textarea
         { from: 116, to: 171 },
         { from: 117, to: 110 },
         { from: 118, to: 111 },
+        { from: 118, to: 203 },
+        { from: 203, to: 106 },
+
         { from: 112, to: 118 },
         { from: 119, to: 113 },
         { from: 139, to: 113 },
         { from: 120, to: 106 },
         { from: 121, to: 106 },
+
+        { from: 204, to: 205 },
+        { from: 205, to: 106 },
+
         { from: 122, to: 120 },
         { from: 123, to: 121 },
         { from: 124, to: 120 },
@@ -922,6 +1106,8 @@ Phase 1</textarea
         { from: 149, to: 136 },
 
         { from: 158, to: 101 },
+        { from: 202, to: 101 },
+
         { from: 150, to: 102 },
         { from: 151, to: 102 },
         { from: 152, to: 102 },
@@ -942,7 +1128,7 @@ Phase 1</textarea
         { from: 168, to: 166 },
         { from: 169, to: 166 },
 
-        { from: 170, to: 171 }
+        { from: 170, to: 171 },
       ])
 
       var edges = new vis.DataSet([])
@@ -954,45 +1140,45 @@ Phase 1</textarea
       var container = document.getElementById('mynetwork')
       var data = {
         nodes: nodes,
-        edges: allEdges
+        edges: allEdges,
       }
       var options = {
         nodes: {
           borderWidth: 2,
-          shadow: true
+          shadow: true,
         },
         edges: {
           width: 2,
           shadow: true,
           smooth: {
-            forceDirection: 'none'
-          }
+            forceDirection: 'none',
+          },
         },
         groups: {
           usergroups: {
             shape: 'icon',
             icon: {
               face: "'Font Awesome 5 Free'",
-              weight: "900",
+              weight: '900',
               code: '\uf0c0',
               size: 50,
-              color: '#8c51cf'
-            }
+              color: '#8c51cf',
+            },
           },
           users: {
             shape: 'icon',
             icon: {
               face: "'Font Awesome 5 Free'",
-              weight: "900",
+              weight: '900',
               code: '\uf007',
               size: 50,
-              color: '#aa00ff'
-            }
+              color: '#aa00ff',
+            },
           },
           physics: {
-            minVelocity: 0.75
-          }
-        }
+            minVelocity: 0.75,
+          },
+        },
       }
       var network = new vis.Network(container, data, options)
 
@@ -1015,55 +1201,49 @@ Phase 1</textarea
       function clickIncrPos() {
         document.getElementById('pos').value++
         $('[data-toggle="popover"]').popover('hide')
-        $('#pagination')
-          .children()
-          .last()
-          .before(
-            `<li class="page-item disabled" data-toggle="popover" id="pop${pos}"
+        $('#pagination').children().last().before(
+          `<li class="page-item disabled" data-toggle="popover" id="pop${pos}"
             data-content="${posArray[pos].comment}"
             data-html="true"
             data-placement="bottom"><a class="page-link">${posArray[pos].stage}</a></li>`
-          )
+        )
         $(`#pop${pos}`).popover()
         $(`#pop${pos}`).popover('show')
         changePos()
         if (pos == posArray.length) {
-          $('#pagination')
-            .children()
-            .last()
-            .remove()
+          $('#pagination').children().last().remove()
           $('#finalbuttongroup').show('fast')
         }
       }
       function clickRemove() {
         var ids = []
         var noGrpNodes = nodes.get({
-          filter: function(n) {
+          filter: function (n) {
             return n.group == undefined
-          }
+          },
         })
 
-        noGrpNodes.forEach(n => {
+        noGrpNodes.forEach((n) => {
           nodes.update([
             {
               id: n.id,
-              hidden: true
-            }
+              hidden: true,
+            },
           ])
         })
       }
       function clusterByCid() {
         //network.setData(data)
         var clusterOptionsByData = {
-          joinCondition: function(childOptions) {
+          joinCondition: function (childOptions) {
             return childOptions.cid == 1
           },
           clusterNodeProperties: {
             id: 'cidCluster',
             label: 'Connecting Care',
             shape: 'dot',
-            size: 80
-          }
+            size: 80,
+          },
         }
         network.cluster(clusterOptionsByData)
       }
@@ -1084,7 +1264,7 @@ Phase 1</textarea
       crossorigin="anonymous"
     ></script>
     <script>
-      $(function() {
+      $(function () {
         $('[data-toggle="popover"]').popover()
         $('#pop0').popover('show')
       })
